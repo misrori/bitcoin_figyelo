@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   # Automatikusan minden nap reggel 8-kor (UTC 6:00)
   schedule:
-    - cron: '0 6 * * *'
+    - cron: '0 10 * * *'
   # Minden push-ra is lefut (teszteléshez)
   push:
     branches:
