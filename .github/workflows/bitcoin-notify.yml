@@ -1,0 +1,37 @@
+name: Bitcoin Telegram Értesítő
+
+on:
+  # Manuálisan is indítható
+  workflow_dispatch:
+  # Automatikusan minden nap reggel 8-kor (UTC 6:00)
+  schedule:
+    - cron: '0 6 * * *'
+  # Minden push-ra is lefut (teszteléshez)
+  push:
+    branches:
+      - main
+
+jobs:
+  send-price:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Kód letöltése
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Python telepítése
+      - name: Python beállítása
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3. Csomagok telepítése
+      - name: Csomagok telepítése
+        run: pip install requests
+
+      # 4. Szkript futtatása (Secrets-ből kapja a token-eket)
+      - name: Bitcoin ár küldése
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python bitcoin_telegram.py
